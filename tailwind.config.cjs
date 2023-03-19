@@ -7,6 +7,21 @@ const config = {
         Urbanist: ["Urbanist"],
       },
     },
+    animation: {
+      gradient: "animateGradient 8s ease infinite",
+    },
+    keyframes: {
+      animateGradient: {
+        "0%, 100%": {
+          "background-size": "200% 200%",
+          "background-position": "bottom",
+        },
+        "50%": {
+          "background-size": "200% 200%",
+          "background-position": "top ",
+        },
+      },
+    },
   },
   plugins: [require("daisyui")],
 };

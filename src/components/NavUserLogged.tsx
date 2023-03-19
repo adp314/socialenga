@@ -1,7 +1,7 @@
 import { useSession, signOut } from "next-auth/react";
 import Image from "next/image";
 
-export function DropdownNav() {
+export const NavUserLogged = () => {
   const { data: session } = useSession();
   return (
     <>
@@ -9,7 +9,7 @@ export function DropdownNav() {
         <div className="flex cursor-pointer items-center justify-end gap-3">
           <p className="text-xl">{session.user.name}</p>
 
-          <div className="dropdown-bottom dropdown-end dropdown">
+          <div className="dropdown dropdown-bottom dropdown-end">
             <label
               tabIndex={0}
               className="btn relative flex h-12 w-12 overflow-hidden rounded-xl shadow-md"
@@ -37,4 +37,4 @@ export function DropdownNav() {
       )}
     </>
   );
-}
+};
