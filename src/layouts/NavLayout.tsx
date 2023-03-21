@@ -20,15 +20,15 @@ export const NavLayout = () => {
         <TradBtn />
       </div>
 
-      <div className="form-control">
+      <div className="form-control rounded-lg shadow">
         <label className="input-group-sm input-group">
-          <span className="border border-indigo-900 bg-indigo-900 ">
-            <FaSearch className="text-white" />
+          <span className=" bg-indigo-300 ">
+            <FaSearch className="text-black" />
           </span>
           <input
             type="text"
             placeholder="Search..."
-            className=" input-bordered input-md w-56 border border-indigo-900"
+            className=" input-bordered input-md w-56 bg-neutral-50"
           />
         </label>
       </div>
