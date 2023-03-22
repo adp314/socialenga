@@ -3,19 +3,18 @@ import type {
   InferGetServerSidePropsType,
   NextPage,
 } from "next";
+
 import { NavLayout } from "@/layouts/NavLayout";
 import { prisma } from "@/server/db";
 import { getServerAuthSession } from "@/server/auth";
-import { useQuery } from "react-query";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getServerAuthSession({
     req: context.req,
     res: context.res,
   });
-  
 
-  if (!session || !session.user || !session.user.board) {
+  if (!session || !session.user) {
     return {
       redirect: {
         destination: "/home",
@@ -24,13 +23,13 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     };
   }
 
-  const board = await prisma.board.findFirst({
+  const board = await prisma.user.findFirst({
     where: {
-      boardName: session.user.board.boardName,
+      boardName: session.user.boardName,
     },
   });
 
-  if (!board) {
+  if (board?.boardName) {
     return {
       redirect: {
         destination: "/home",
@@ -38,7 +37,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       },
     };
   }
-
   return {
     props: {},
   };
