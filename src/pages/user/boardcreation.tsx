@@ -3,46 +3,48 @@ import type {
   InferGetServerSidePropsType,
   NextPage,
 } from "next";
-
 import { NavLayout } from "@/layouts/NavLayout";
 import { prisma } from "@/server/db";
 import { getServerAuthSession } from "@/server/auth";
+import { useQuery } from "react-query";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getServerAuthSession({
     req: context.req,
     res: context.res,
   });
+  
 
-  if (!session || !session.user) {
+  if (!session || !session.user || !session.user.board) {
     return {
       redirect: {
-        destination: "/",
+        destination: "/home",
         permanent: false,
       },
     };
   }
 
-  const board = await prisma.user.findUnique({
+  const board = await prisma.board.findFirst({
     where: {
-      id: session.user.id,
+      boardName: session.user.board.boardName,
     },
   });
 
   if (!board) {
     return {
       redirect: {
-        destination: "/user/boardcreation",
+        destination: "/home",
         permanent: false,
       },
     };
   }
+
   return {
     props: {},
   };
 }
 
-const CreateBoard: NextPage<
+const BoardCreation: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({}) => {
   return (
@@ -52,4 +54,4 @@ const CreateBoard: NextPage<
   );
 };
 
-export default CreateBoard;
+export default BoardCreation;

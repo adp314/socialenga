@@ -2,6 +2,7 @@ import { useSession, signOut } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 
+
 export const NavUserLogged = () => {
   const { data: session } = useSession();
   return (
@@ -26,13 +27,13 @@ export const NavUserLogged = () => {
               tabIndex={0}
               className="dropdown-content menu rounded-box mt-2 w-52 bg-base-100 p-2 shadow"
             >
-              {session.user.boardName != undefined ? null : (
+              {session.user.board.boardName != undefined ? null : (
                 <li>
-                  <Link href="/user/boardcreation">Create board</Link>
+                  <Link href="/user/boardcreation">Create Board</Link>
                 </li>
               )}
               <li>
-                <Link href="/user/options">Options</Link>
+                <Link href="/user/account">Account</Link>
               </li>
               <li onClick={() => void signOut()} className="hover:bg-red-300">
                 <a>Deconnexion</a>

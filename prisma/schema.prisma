@@ -49,13 +49,16 @@ model Session {
 
 model User {
     id            String    @id @default(cuid())
-    name          String?
+    name      String?
     email         String?   @unique
     emailVerified DateTime?
     image         String?
-    boardName   String? @unique
     accounts      Account[]
-    sessions      Session[]
+    sessions      Session[]  
+
+sAddInfos sAddInfos?
+board board?
+    
     
 }
 
@@ -67,11 +70,26 @@ model VerificationToken {
     @@unique([identifier, token])
 }
 
-// model Board {
-//     id String @id @default(cuid())
-//     userId String @unique
+model sAddInfos {
+    id String @id @default(cuid())
+    userId String @unique
+    firstName String?
+    lastName String?
 
-//     user User @relation(fields: [userId], references: [id])
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
     
-// }
+}
+
+model board {
+    id String @id @default(cuid())
+    userId String @unique
+    boardName String? @unique
+    boardImage String?
+    boardBanner String?
+
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    
+}
