@@ -1,10 +1,26 @@
 import { useSession, signOut } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
+import { useQuery } from "react-query";
 
+type BoardData = {
+  id: string;
+  userId: string;
+  boardName: string;
+  boardImage: string;
+  boardBanner: string;
+};
 
+const BoardCheck = () => {
+  return useQuery<BoardData | null>(["board"], async () => {
+    const response: Response = await fetch("/api/user/get-board");
+    const data = (await response.json()) as BoardData;
+    return data;
+  });
+};
 export const NavUserLogged = () => {
   const { data: session } = useSession();
+  const { data: boardCheck } = BoardCheck();
   return (
     <>
       {session && (
@@ -27,11 +43,11 @@ export const NavUserLogged = () => {
               tabIndex={0}
               className="dropdown-content menu rounded-box mt-2 w-52 bg-base-100 p-2 shadow"
             >
-              {session.user.board.boardName != undefined ? null : (
+              {!boardCheck ? (
                 <li>
                   <Link href="/user/boardcreation">Create Board</Link>
                 </li>
-              )}
+              ) : null}
               <li>
                 <Link href="/user/account">Account</Link>
               </li>

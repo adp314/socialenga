@@ -23,13 +23,14 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     };
   }
 
-  const board = await prisma.user.findFirst({
+  const board = await prisma.board.findFirst({
     where: {
-      boardName: session.user.boardName,
+      userId: session.user.id,
+      boardName: null,
     },
   });
 
-  if (board?.boardName) {
+  if (board?.boardName === null) {
     return {
       redirect: {
         destination: "/home",

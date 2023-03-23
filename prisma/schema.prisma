@@ -55,9 +55,8 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]  
-
-sAddInfos sAddInfos?
-board board?
+    sAddInfos     sAddInfos?
+    board         Board?
     
     
 }
@@ -81,7 +80,7 @@ model sAddInfos {
     
 }
 
-model board {
+model Board {
     id String @id @default(cuid())
     userId String @unique
     boardName String? @unique
