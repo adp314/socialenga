@@ -33,7 +33,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
   const board = await prisma.board.findFirst({
     where: {
-      userId: session.user.id,
+      boardHolderId: session.user.id,
       boardName: null,
     },
   });
@@ -54,7 +54,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 const BoardCreation: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({}) => {
-  const router = useRouter();
   const [boardData, setBoardData] = useState<Inputs>();
   const {
     register,
@@ -62,8 +61,7 @@ const BoardCreation: NextPage<
     formState: { errors },
   } = useForm<Inputs>();
 
-  const BoardSubmit: SubmitHandler<Inputs> = async (data, e) => {
-    e?.preventDefault();
+  const BoardSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
       const response = await fetch("/api/user/post-board", {
         method: "POST",
@@ -79,7 +77,6 @@ const BoardCreation: NextPage<
       if (response.ok) {
         const board = (await response.json()) as Inputs;
         setBoardData(board);
-        // router.push("/home");
       } else {
         window.alert("Failed to create board");
       }

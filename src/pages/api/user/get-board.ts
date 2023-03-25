@@ -15,7 +15,7 @@ export default async function getBoard(
 
   const board = await prisma.board.findFirst({
     where: {
-      userId: session.user.id,
+      id: session.user.id,
       boardName: {
         not: null,
       },

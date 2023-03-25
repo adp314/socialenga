@@ -48,17 +48,23 @@ model Session {
 }
 
 model User {
-    id            String    @id @default(cuid())
-    name      String?
-    email         String?   @unique
-    emailVerified DateTime?
-    image         String?
-    accounts      Account[]
-    sessions      Session[]  
-    sAddInfos     sAddInfos?
-    board         Board?
-    
-    
+  id             String    @id @default(cuid())
+  name           String?
+  email          String?   @unique
+  emailVerified  DateTime?
+  image          String?
+  accounts       Account[]
+  sessions       Session[]  
+  board          Board?
+}
+
+model Board {
+  id             String   @id @default(cuid())
+  boardName      String?  @unique
+  boardImage     String?
+  boardBanner    String?
+  boardHolder    User    @relation(fields: [boardHolderId], references: [id])
+  boardHolderId  String  @unique
 }
 
 model VerificationToken {
@@ -67,28 +73,4 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
-}
-
-model sAddInfos {
-    id String @id @default(cuid())
-    userId String @unique
-    firstName String?
-    lastName String?
-
-    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-    
-}
-
-model Board {
-    id String @id @default(cuid())
-    userId String @unique
-    boardName String? @unique
-    boardImage String?
-    boardBanner String?
-
-
-    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-    
 }
