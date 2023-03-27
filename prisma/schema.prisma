@@ -59,12 +59,33 @@ model User {
 }
 
 model Board {
-    id            String  @id @default(cuid())
-    boardName     String? @unique
-    boardImage    String?
-    boardBanner   String?
-    boardHolderId String  @unique
-    boardHolder   User    @relation(fields: [boardHolderId], references: [id])
+    id                String    @id @default(cuid())
+    holderId          String    @unique
+    name              String?   @unique
+    certified         Boolean   @default(false)
+    image             String    @default("https://cdn.discordapp.com/avatars/853576062172135425/e81017f8e9459c05d913fbad1a4abf25.png")
+    banner            String    @default("https://cdn.pixabay.com/photo/2020/06/02/09/39/banner-5250179_960_720.jpg")
+    twitter           String?
+    facebook          String?
+    instagram         String?
+    tiktok            String?
+    twitch            String?
+    youtube           String?
+    startCampaignDate DateTime?
+    endCampaignDate   DateTime?
+    rewards           Rewards[]
+
+    boardHolder User @relation(fields: [holderId], references: [id])
+}
+
+model Rewards {
+    id          String   @id @default(cuid())
+    boardId     String
+    tier        Int
+    points      Int
+    description String
+    createdAt   DateTime @default(now())
+    board       Board    @relation(references: [id], fields: [boardId])
 }
 
 model VerificationToken {

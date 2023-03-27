@@ -5,10 +5,10 @@ import { useQuery } from "react-query";
 
 type BoardData = {
   id: string;
-  userId: string;
-  boardName: string;
-  boardImage: string;
-  boardBanner: string;
+  name: string;
+  image: string;
+  banner: string;
+  holderId: string;
 };
 
 const BoardCheck = () => {
@@ -18,9 +18,12 @@ const BoardCheck = () => {
     return data;
   });
 };
+
 export const NavUserLogged = () => {
   const { data: session } = useSession();
   const { data: boardCheck } = BoardCheck();
+  const username = boardCheck?.name;
+
   return (
     <>
       {session && (
@@ -39,22 +42,40 @@ export const NavUserLogged = () => {
                 object-fit="cover"
               />
             </label>
-            <ul
-              tabIndex={0}
-              className="dropdown-content menu rounded-box mt-2 w-52 bg-base-100 p-2 shadow"
-            >
-              {!boardCheck ? (
+            {!boardCheck ? (
+              <ul
+                tabIndex={0}
+                className="dropdown-content menu rounded-box mt-2 w-52 bg-base-100 p-2 shadow"
+              >
                 <li>
                   <Link href="/user/boardcreation">Create Board</Link>
                 </li>
-              ) : null}
-              <li>
-                <Link href="/user/account">Account</Link>
-              </li>
-              <li onClick={() => void signOut()} className="hover:bg-red-300">
-                <a>Deconnexion</a>
-              </li>
-            </ul>
+                <li>
+                  <Link href="/user/account">Account</Link>
+                </li>
+                <li onClick={() => void signOut()} className="hover:bg-red-300">
+                  <a>Deconnexion</a>
+                </li>
+              </ul>
+            ) : (
+              <ul
+                tabIndex={0}
+                className="dropdown-content menu rounded-box mt-2 w-52 bg-base-100 p-2 shadow"
+              >
+                <li>
+                  <Link href={`/board/${username}`}>Board</Link>
+                </li>
+                <li>
+                  <Link href="/user/boardedit">Edit Board</Link>
+                </li>
+                <li>
+                  <Link href="/user/account">Account</Link>
+                </li>
+                <li onClick={() => void signOut()} className="hover:bg-red-300">
+                  <a>Deconnexion</a>
+                </li>
+              </ul>
+            )}
           </div>
         </div>
       )}

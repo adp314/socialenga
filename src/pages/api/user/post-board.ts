@@ -4,9 +4,9 @@ import { getServerAuthSession } from "@/server/auth";
 import { z } from "zod";
 
 type BoardInput = {
-  boardName: string;
-  boardImage: string;
-  boardBanner: string;
+  name: string;
+  image: string;
+  banner: string;
 };
 
 export default async function POST(req: NextApiRequest, res: NextApiResponse) {
@@ -25,10 +25,10 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
 
   const board = await prisma.board.create({
     data: {
-      boardName: boardInput.boardName,
-      boardImage: boardInput.boardImage,
-      boardBanner: boardInput.boardBanner,
-      boardHolderId: session.user.id,
+      name: boardInput.name,
+      image: boardInput.image,
+      banner: boardInput.banner,
+      holderId: session.user.id,
     },
   });
   console.log(board);

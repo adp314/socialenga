@@ -1,30 +1,28 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getSession } from "next-auth/react";
 import { prisma } from "@/server/db";
+import { getServerAuthSession } from "@/server/auth";
 
-export default async function GET(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  const session = await getSession({ req });
+export default async function GET(req: NextApiRequest, res: NextApiResponse) {
+  const session = await getServerAuthSession({
+    req,
+    res,
+  });
 
   if (!session) {
-    res.status(401).end(); // or redirect to login page
+    res.status(401).end();
+    console.error("no session");
     return;
   }
 
   const board = await prisma.board.findFirst({
     where: {
-      id: session.user.id,
-      boardName: {
-        not: null,
-      },
+      holderId: session.user.id,
     },
   });
 
   if (board) {
-    res.status(200).send(board);
+    return res.status(200).send(board);
   } else {
-    res.status(400).end();
+    return res.status(404).send(null);
   }
 }

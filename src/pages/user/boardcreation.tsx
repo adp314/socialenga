@@ -2,18 +2,16 @@ import { NavLayout } from "@/layouts/NavLayout";
 import { useState } from "react";
 import { prisma } from "@/server/db";
 import { getServerAuthSession } from "@/server/auth";
-// import { useForm, type SubmitHandler } from "react-hook-form";
 import type {
   GetServerSidePropsContext,
   InferGetServerSidePropsType,
   NextPage,
 } from "next";
-import { number } from "zod";
 
 type Inputs = {
-  boardName: string;
-  boardImage: string;
-  boardBanner: string;
+  name: string;
+  image: string;
+  banner: string;
 };
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
@@ -33,12 +31,12 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
   const board = await prisma.board.findFirst({
     where: {
-      boardHolderId: session.user.id,
-      boardName: null,
+      holderId: session.user.id,
+      name: null,
     },
   });
 
-  if (board?.boardName === null) {
+  if (board?.name === null) {
     return {
       redirect: {
         destination: "/home",
@@ -55,9 +53,9 @@ const BoardCreation: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({}) => {
   const [boardData, setBoardData] = useState<Inputs>({
-    boardName: "",
-    boardImage: "",
-    boardBanner: "",
+    name: "",
+    image: "",
+    banner: "",
   });
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -76,7 +74,7 @@ const BoardCreation: NextPage<
       if (response.ok) {
         const boardResult = (await response.json()) as Inputs;
         console.log(
-          `boardname : ${boardResult.boardName} & the boardImageURL: ${boardResult.boardImage}`
+          `boardname : ${boardResult.name} & the boardImageURL: ${boardResult.image}`
         );
       } else {
         window.alert("Failed to create board");
@@ -93,27 +91,26 @@ const BoardCreation: NextPage<
         <form className="flex flex-col gap-4 text-black" onSubmit={BoardSubmit}>
           <input
             type="text"
-            value={boardData.boardName}
+            value={boardData.name}
             onChange={handleChange}
             name="boardName"
           />
           <input
             type="text"
-            value={boardData.boardImage}
+            value={boardData.image}
             onChange={handleChange}
             name="boardImage"
           />
 
           <input
             type="text"
-            value={boardData.boardBanner}
+            value={boardData.banner}
             onChange={handleChange}
             name="boardBanner"
           />
 
           <input type="submit" className="bg-neutral-200" />
         </form>
-        <div>{boardData?.boardName}</div>
       </div>
     </div>
   );
