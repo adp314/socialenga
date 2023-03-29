@@ -32,14 +32,13 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const board = await prisma.board.findFirst({
     where: {
       holderId: session.user.id,
-      name: null,
     },
   });
 
-  if (board?.name === null) {
+  if (board) {
     return {
       redirect: {
-        destination: "/home",
+        destination: "/user/boardedit",
         permanent: false,
       },
     };
@@ -93,20 +92,20 @@ const BoardCreation: NextPage<
             type="text"
             value={boardData.name}
             onChange={handleChange}
-            name="boardName"
+            name="name"
           />
           <input
             type="text"
             value={boardData.image}
             onChange={handleChange}
-            name="boardImage"
+            name="image"
           />
 
           <input
             type="text"
             value={boardData.banner}
             onChange={handleChange}
-            name="boardBanner"
+            name="banner"
           />
 
           <input type="submit" className="bg-neutral-200" />

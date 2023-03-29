@@ -23,6 +23,6 @@ export default async function GET(req: NextApiRequest, res: NextApiResponse) {
   if (board) {
     return res.status(200).send(board);
   } else {
-    return res.status(404).send(null);
+    return null;
   }
 }

@@ -14,7 +14,7 @@ type BoardData = {
 const BoardCheck = () => {
   return useQuery<BoardData | null>(["board"], async () => {
     const response: Response = await fetch("/api/user/get-board");
-    const data = (await response.json()) as BoardData;
+    const data = (await response.json());
     return data;
   });
 };
