@@ -6,6 +6,7 @@ import {
 } from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import TwitterProvider from "next-auth/providers/twitter";
 import { env } from "@/env.mjs";
 import { prisma } from "@/server/db";
 
@@ -19,7 +20,7 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
       id: string;
-      
+
       // ...other properties
       // role: UserRole;
     } & DefaultSession["user"];
@@ -47,11 +48,20 @@ export const authOptions: NextAuthOptions = {
     },
   },
   adapter: PrismaAdapter(prisma),
+  secret: env.NEXTAUTH_SECRET,
   providers: [
     DiscordProvider({
       clientId: env.DISCORD_CLIENT_ID,
       clientSecret: env.DISCORD_CLIENT_SECRET,
+      allowDangerousEmailAccountLinking: true,
     }),
+    TwitterProvider({
+      clientId: env.TWITTER_CLIENT_ID,
+      clientSecret: env.TWITTER_CLIENT_SECRET,
+      version: "2.0",
+      allowDangerousEmailAccountLinking: true,
+    }),
+
     /**
      * ...add more providers here.
      *

@@ -5,6 +5,7 @@ import { useGetBoard } from "@/hooks/useGetBoard";
 import { BoardData } from "@/types";
 import { FaTwitter, FaFacebookF, FaTiktok } from "react-icons/fa";
 import { GrInstagram } from "react-icons/gr";
+import { signIn } from "next-auth/react";
 
 const BoardEdit: NextPage = () => {
   const { data: board } = useGetBoard();
@@ -97,6 +98,9 @@ const BoardEdit: NextPage = () => {
               </div>
             </div>
           </form>
+          <button className="bg-black" onClick={() => void signIn()}>
+            Twitter link test
+          </button>
         </div>
       </div>
     </div>
